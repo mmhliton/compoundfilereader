@@ -142,10 +142,10 @@ const void ListDirectory(const CFB::CompoundFileReader& reader, bool escape)
     });
 }
 
-const CFB::COMPOUND_FILE_ENTRY* FindStream(const CFB::CompoundFileReader& reader, const char* streamName)
+const CFB::COMPOUND_FILE_ENTRY* FindStream(const CFB::CompoundFileReader& reader, const char* streamName, int maxLevel = -1)
 {
     const CFB::COMPOUND_FILE_ENTRY* ret = nullptr;
-    reader.EnumFiles(reader.GetRootEntry(), -1, 
+    reader.EnumFiles(reader.GetRootEntry(), maxLevel,
         [&](const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& u16dir, int level)->void
     {
         if (reader.IsStream(entry))
@@ -260,7 +260,7 @@ int main_internal(int argc, char* argv[])
         }
         else
         {
-            const CFB::COMPOUND_FILE_ENTRY* entry = FindStream(reader, streamName.c_str());
+            const CFB::COMPOUND_FILE_ENTRY* entry = FindStream(reader, streamName.c_str(), 5);
             if (entry == NULL)
             {
                 cerr << "error: stream doesn't exist" << endl;
